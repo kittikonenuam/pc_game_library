@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎮 PC Game Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:    #050711;
+      --bg-card:    #0c1120;
+      --accent1:    #00f0ff;
+      --accent2:    #ff2d78;
+      --accent3:    #a855f7;
+      --text-main:  #e8eaf6;
+      --text-muted: #6b7280;
+      --border:     rgba(0,240,255,.18);
+      --glow1:      0 0 18px rgba(0,240,255,.45);
+      --glow2:      0 0 18px rgba(255,45,120,.45);
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(168,85,247,.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%,  rgba(0,240,255,.10) 0%, transparent 55%);
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(5,7,17,.72);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900; font-size: 1.4rem;
+      background: linear-gradient(90deg, var(--accent1), var(--accent3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+    }
+    .logo span { color: var(--accent2); -webkit-text-fill-color: var(--accent2); }
+
+    .btn-add {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .6rem 1.4rem;
+      font-family: 'Orbitron', monospace; font-size: .78rem; font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent3));
+      color: #050711; border: none; border-radius: 6px;
+      text-decoration: none; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-add:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: var(--glow1);
+    }
+
+    /* ── HERO COUNT ── */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1rem 2rem;
+    }
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--accent1) 0%, var(--accent3) 50%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: var(--text-muted); margin-top: .6rem; font-size: 1.05rem; }
+    .badge {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: .3rem .9rem;
+      border: 1px solid var(--accent1);
+      border-radius: 999px;
+      font-size: .82rem;
+      color: var(--accent1);
+      letter-spacing: 1px;
+    }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.6rem;
+      padding: 1.5rem 2.5rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,240,255,.04), rgba(168,85,247,.04));
+      opacity: 0; transition: opacity .25s;
+      pointer-events: none;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.5), var(--glow1); border-color: var(--accent1); }
+    .card:hover::before { opacity: 1; }
+
+    .card-img {
+      width: 100%; height: 180px; object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #0f1629, #1a0829);
+    }
+    .card-img-placeholder {
+      width: 100%; height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, #0f1629, #1a0829);
+    }
+
+    .card-body { padding: 1.1rem 1.2rem; flex: 1; display: flex; flex-direction: column; gap: .55rem; }
+
+    .card-genre {
+      display: inline-block;
+      padding: .2rem .65rem;
+      border-radius: 4px;
+      font-size: .72rem; font-weight: 600; letter-spacing: 1px;
+      background: rgba(168,85,247,.18);
+      color: var(--accent3);
+      border: 1px solid rgba(168,85,247,.35);
+      width: fit-content;
+    }
+
+    .card-title {
+      font-family: 'Orbitron', monospace;
+      font-size: .95rem; font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .card-meta {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: .88rem; color: var(--text-muted);
+    }
+    .card-price {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--accent1);
+    }
+    .card-price.free { color: #22c55e; }
+
+    .card-footer {
+      display: flex; gap: .6rem;
+      padding: .8rem 1.2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn {
+      flex: 1; padding: .5rem;
+      border: none; border-radius: 6px;
+      font-family: 'Rajdhani', sans-serif; font-size: .9rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; text-align: center;
+      transition: transform .18s, box-shadow .18s, filter .18s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-edit {
+      background: rgba(0,240,255,.12);
+      color: var(--accent1);
+      border: 1px solid rgba(0,240,255,.3);
+    }
+    .btn-edit:hover { box-shadow: var(--glow1); background: rgba(0,240,255,.22); }
+    .btn-del {
+      background: rgba(255,45,120,.12);
+      color: var(--accent2);
+      border: 1px solid rgba(255,45,120,.3);
+    }
+    .btn-del:hover { box-shadow: var(--glow2); background: rgba(255,45,120,.22); }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 5rem 1rem;
+    }
+    .empty-icon { font-size: 4rem; display: block; margin-bottom: 1rem; }
+    .empty h2 { font-family: 'Orbitron', monospace; font-size: 1.2rem; color: var(--text-muted); }
+
+    /* ── SCANLINE overlay ── */
+    body::after {
+      content: '';
+      pointer-events: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,.03) 2px,
+        rgba(0,0,0,.03) 4px
+      );
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 1rem; }
+      .grid  { padding: 1rem 1rem 3rem; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🎮 GAME<span>VAULT</span></div>
+  <a href="{{ url_for('append') }}" class="btn-add">＋ ADD GAME</a>
+</header>
+
+<div class="hero">
+  <h1>PC Game Library</h1>
+  <p>จัดการคลังเกม PC ของคุณในที่เดียว</p>
+  <span class="badge">📦 {{ games|length }} เกมในคลัง</span>
+</div>
+
+<div class="grid">
+  {% if games %}
+    {% for game in games %}
+    <div class="card">
+      {% if game['image'] %}
+        <img class="card-img" src="{{ game['image'] }}" alt="{{ game['name'] }}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="card-img-placeholder" style="display:none;">🎮</div>
+      {% else %}
+        <div class="card-img-placeholder">🎮</div>
+      {% endif %}
+
+      <div class="card-body">
+        {% if game['genre_name'] %}
+          <span class="card-genre">{{ game['genre_name'] }}</span>
+        {% endif %}
+        <div class="card-title">{{ game['name'] }}</div>
+        <div class="card-meta">
+          <span>👥 {{ game['max_players'] }} Player{% if game['max_players'] > 1 %}s{% endif %}</span>
+          <span class="card-price {% if game['price'] == 0 %}free{% endif %}">
+            {% if game['price'] == 0 %}FREE{% else %}฿{{ "%.0f"|format(game['price']) }}{% endif %}
+          </span>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <a href="{{ url_for('edit', id=game['id']) }}" class="btn btn-edit">✏️ แก้ไข</a>
+        <a href="{{ url_for('delete', id=game['id']) }}" class="btn btn-del"
+           onclick="return confirm('ลบเกม {{ game['name'] }} ออกจากคลังใช่ไหม?')">🗑️ ลบ</a>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty">
+      <span class="empty-icon">🕹️</span>
+      <h2>ยังไม่มีเกมในคลัง เริ่มเพิ่มเกมแรกได้เลย!</h2>
+    </div>
+  {% endif %}
+</div>
+
+</body>
+</html>
